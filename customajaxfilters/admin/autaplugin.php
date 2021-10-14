@@ -159,8 +159,8 @@ class AutaPlugin {
 		//$specialType=(isset($_POST["specialType"])) ? "cj" : "";		
 		$specialType="cj";
 		$tableType=(isset($_POST["tableType"])) ? "dedicated" : "";
-		//$mImgTools=(isset($_POST["mImgTools"])) ? "1" : "";
-		$mImgTools="";
+		$mImgTools=(isset($_POST["mImgTools"])) ? "1" : "";
+		//$mImgTools="";
 		if (isset($_POST["cafActionEdit"])) {
 			$wpdb->update(AutaPlugin::getTable("main"), array('singular' => $singular, 'plural' => $plural, 'specialType' => $specialType, 'tableType' => $tableType), array('slug' => $slug) );
 			foreach ($this->customPost as $cpt ) {
