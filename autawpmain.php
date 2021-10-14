@@ -1,18 +1,14 @@
 <?php
    /*
    Plugin Name: CJ feed content generator
-   Plugin URI: https://www.ttj.cz
-   description: Adds custom post option, adds custom fields to administration interface v2
-  mAuta plugin
-   Version: 3.1a
+   Plugin URI: https://www.cyltr.com/cj-feed-content-generator/
+   Description: Create whole affiliate website simply by importing product feeds. Easy to customize, templatable and blazing fast.
+   Version: 3.1
    Author: Mik
    Author URI: https://www.ttj.cz
    License: GPL2
    */
    
-// mhtz
-
-
 
 
 define('CAF_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
