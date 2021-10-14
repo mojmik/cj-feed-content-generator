@@ -2,21 +2,7 @@
 namespace CustomAjaxFilters\Majax\MajaxWP;
 
 Class MimgTools {
-	public static function getPath($type="rel",$ver="inplugin") {
-		//mimgmain in uploads dir
-		//$uploadsPath="../../../../../uploads/";		
-
-		//mimgmain in plugin dir
-		//$uploadsPath="./mimg";	
-
-		if ($type=="rel") {
-			if ($ver=="inplugin") return "./mimg";
-			else return "../../../../../uploads/";
-		} else {
-			if ($ver=="inplugin") return CAF_PLUGIN_PATH."/customajaxfilters/majax/majaxwp/mimg/";
-			else return wp_get_upload_dir()["basedir"];
-		}
-	}	
+	
 	public static function handleRequest() {
 		$url=$_SERVER['REQUEST_URI'];
 		$p=strpos($url,"mimgtools/");
@@ -33,15 +19,29 @@ Class MimgTools {
 		header('Content-Length: ' . filesize($fileName));
 		readfile($fileName);		
 	}
+	static function getInfFn($postId) {
+		return "mimgnfo-$postId";
+	}
+	static function getImgFn($postId) {
+		return "mimg2-$postId.jpg";
+	}
+	static function checkExist($uploadsPath,$postId) {
+	 $filenameNfo = "$uploadsPath/".MimgTools::getInfFn($postId);
+	 $filenameImg = "$uploadsPath/".MimgTools::getImgFn($postId);	
+	 $ex=0;
+	 if (file_exists($filenameNfo))	$ex=1;
+	 if (file_exists($filenameImg))	$ex=2;
+	 return $ex;
+	}
 	static function prepImage($postId="") {
 		//no htaccess or mimgmain in root dir
 		//$uploadsPath="./wp-content/uploads";
 
 		//mimgmain in uploads dir
-		//$uploadsPath="../../../../../uploads/";		
+		$uploadsPath="../../../../../uploads/";		
 
 		//mimgmain in plugin dir
-		$uploadsPath=MimgTools::getPath();	
+		//$uploadsPath="./mimg";	
 
 		if (isset($_REQUEST["debug"])) {
 			if ($handle = opendir($uploadsPath)) {
@@ -53,18 +53,19 @@ Class MimgTools {
 				closedir($handle);
 			}
 			exit;
-		}
-		
+		}		
 		if (!$postId) return "";
-		$filenameNfo = "$uploadsPath/mimgnfo-$postId";
-		$filenameImg = "$uploadsPath/mimg2-$postId.jpg";				
-		if (file_exists($filenameImg)) {
+		$filenameNfo = "$uploadsPath/".MimgTools::getInfFn($postId);
+		$filenameImg = "$uploadsPath/".MimgTools::getImgFn($postId);
+		$ex=MimgTools::checkExist($uploadsPath,$postId);
+		if ($ex==2) {			
 			//already have image			
 			MimgTools::streamImage($filenameImg);
 			die();
 		}
-
-		if (file_exists($filenameNfo)) {			
+		
+		if ($ex==1) {			
+			//echo "ex:$filenameNfo";
 			$url=file_get_contents($filenameNfo);		
 			$image = ImageCreateFromString(file_get_contents($url));  
 			if ($image) {
@@ -79,10 +80,13 @@ Class MimgTools {
 				
 				ImageJPEG($output, $filenameImg, 95); 
 				// return resized image	  
+				unlink($filenameNfo);
 				MimgTools::streamImage($filenameImg);
 				die();
 			}
-		}		
+		}
+		
+				
 		die();		
 	}
 

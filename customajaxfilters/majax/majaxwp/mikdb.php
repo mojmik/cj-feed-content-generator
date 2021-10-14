@@ -300,11 +300,12 @@ class MikDb {
 		}
 		return $query;
 	}
-	public static function insertRow($table,$mArr,$skipCols=[]) {
+	public static function insertRow($table,$mArr,$skipCols=[],$debug=false) {
 		global $wpdb;
 		$sql=MikDb::getInsertQueryFromArray($table,$mArr,$skipCols);
 		$wpdb->get_results($sql);
-		return $wpdb->insert_id;
+		if ($debug) return $sql;
+		else return $wpdb->insert_id;
 	}
 	public static function clearTable($table,$where=[]) {
 		global $wpdb;

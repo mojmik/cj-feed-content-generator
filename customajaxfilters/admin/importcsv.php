@@ -375,14 +375,14 @@ class ImportCSV {
 					$n++;
 				}		
 				if (!empty($cj)) $mRow=$cj->produceRecord($mRow);			
-				MajaxWP\MikDb::insertRow($table,$mRow,$skipCols);	
+				AutaPlugin::logWrite(MajaxWP\MikDb::insertRow($table,$mRow,$skipCols,true));	
 				$mInserted++;			 
 			}			
 				 
 		}
 		fclose($fh);				
 		$total=($colsOnFirstLine) ? ($lineNum-1) : $lineNum;
-		AutaPlugin::logWrite("csv loaded ".$file." into ".$table." from: ".$lineFrom." total: ".$total);
+		AutaPlugin::logWrite("csv loaded ".$file." into ".$table." from: ".$lineFrom." total: ".$total." ins: ".$mInserted);
 		return $total;		
 	}
 	function createTable($mCols) {	

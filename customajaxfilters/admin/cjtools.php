@@ -141,7 +141,12 @@ class CJtools {
             $useMimgTools=Settings::loadSetting("mImgTools-".$this->customPostType,"cptsettings");
             if ($useMimgTools && !empty($r["imageurl"])) {                
                 $id=md5($r["imageurl"]);
-                $fn=MajaxWP\MimgTools::getPath("abs")."mimgnfo-$id";
+                //$fn=CAF_PLUGIN_PATH."/customajaxfilters/majax/majaxwp/mimg/mimgnfo-$id";
+				$upload_dir = wp_upload_dir();
+				$upload_dir = $upload_dir['basedir'];
+				//pokud uz mame stejny obrazek, tak to preskocime (jina velikost atd.)
+				if (MajaxWP\MimgTools::checkExist($upload_dir,$id)>0) continue;	
+				$fn=$upload_dir."/".MajaxWP\MimgTools::getInfFn($id);
                 file_put_contents($fn,$r["imageurl"]); 
                 $r["imageurl"] = "/mimgtools/$id/";                            
             }
