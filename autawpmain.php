@@ -3,7 +3,7 @@
    Plugin Name: CJ feed content generator
    Plugin URI: https://www.cyltr.com/cj-feed-content-generator/
    Description: Create whole affiliate website simply by importing product feeds. Easy to customize, templatable and blazing fast.
-   Version: 3.1
+   Version: 3.2
    Author: Mik
    Author URI: https://www.ttj.cz
    License: GPL2
